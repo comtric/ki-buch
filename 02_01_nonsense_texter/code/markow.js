@@ -18,25 +18,31 @@ class Markow {
       this.lerneUebergang(letzteZeichen, naechstesZeichen);
     }
   }
-  
+
   lerneUebergang(letzteZeichen, naechstesZeichen) {
     const eintrag = this.uebergaenge[letzteZeichen];
     if (!eintrag) {
-      this.uebergaenge[letzteZeichen] = [naechstesZeichen];
+      this.uebergaenge[letzteZeichen] = { [naechstesZeichen]: 1 };
     } else {
-      if (!eintrag.includes(naechstesZeichen)) {
-        eintrag.push(naechstesZeichen);
+      let eintrag2 = eintrag[naechstesZeichen];
+      if (!eintrag2) {
+        //eintrag.push({ [naechstesZeichen]: 1 });
+        eintrag[naechstesZeichen] = 1
+      }
+      else {
+        eintrag[naechstesZeichen] = eintrag[naechstesZeichen] + 1;
       }
     }
   }
-  
+
   // Schnittstelle: Text erzeugen
   erzeugeText(anfang, nZeichen) {
     let letzteZeichen = anfang;
     const sequenz = [anfang];
 
     while (sequenz.length <= nZeichen) {
-      const naechsteZeichen = this.zufaelligerUebergang(letzteZeichen);
+      const naechsteZeichen = this.gewichteterUebergang(letzteZeichen);
+      // const naechsteZeichen = this.zufaelligerUebergang(letzteZeichen);
       if (!naechsteZeichen) {
         break;
       }
@@ -50,9 +56,44 @@ class Markow {
   }
 
   zufaelligerUebergang(letzteZeichen) {
-    const eintrag = this.uebergaenge[letzteZeichen];
+    let eintrag = this.uebergaenge[letzteZeichen];
     if (eintrag) {
-      return random(eintrag);
+      let array = Object.entries(eintrag);
+      array = array.map(element => element[0]);
+      let result = random(array);
+      return result;
+    }
+  }
+
+  gewichteterUebergang(letzteZeichen) {
+    let eintrag = this.uebergaenge[letzteZeichen];
+    if (eintrag) {
+      let result = this.gewichteterZufall(eintrag);
+      // let array = Object.entries(eintrag);
+      // array = array.map(element => element[0]);
+      // let result = random(array);
+      return result;
+    }
+  }
+
+  // Reproduziert die Häufigkeiten in ereignisse, sprich: wenn diese Funktion
+  // oft genug aufgerufen wird, dann liefert sie in 60 von 100 Fällen eine 
+  // Niete etc.
+  gewichteterZufall(ereignisse) {
+    let nEreignisse = 0;
+
+    for (let ereignis in ereignisse) {
+      nEreignisse += ereignisse[ereignis];
+    }
+
+    const zufallszahl = Math.random() * nEreignisse;
+    let summe = 0;
+
+    for (let ereignis in ereignisse) {
+      summe += ereignisse[ereignis];
+      if (summe >= zufallszahl) {
+        return ereignis;
+      }
     }
   }
 
@@ -62,10 +103,16 @@ class Markow {
     const anschluesseAlsTabelle = Object.entries(this.uebergaenge);
     for (let [dieseZeichen, naechstesZeichen] of anschluesseAlsTabelle) {
       dieseZeichen = dieseZeichen.replaceAll(" ", "_");
-      naechstesZeichen = naechstesZeichen.join("|");
-      naechstesZeichen = naechstesZeichen.replaceAll(" ", "_");
-      naechstesZeichen = naechstesZeichen.replaceAll("\n", "\\n");
-      const zeile = dieseZeichen + " -> " + naechstesZeichen;
+      naechstesZeichen = Object.entries(naechstesZeichen);
+      let naechstesZeichen2 = "";
+      naechstesZeichen.forEach((element, i) => {
+        if (i > 0) naechstesZeichen2 += "|";
+        naechstesZeichen2 += element[0];
+      });
+      //naechstesZeichen2 = naechstesZeichen.join("|");
+      naechstesZeichen2 = naechstesZeichen2.replaceAll(" ", "_");
+      naechstesZeichen2 = naechstesZeichen2.replaceAll("\n", "\\n");
+      const zeile = dieseZeichen + " -> " + naechstesZeichen2;
       zeilen.push(zeile);
     }
     const ergebnis = zeilen.join('&#13;');
