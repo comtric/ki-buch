@@ -45,7 +45,7 @@ class Markow {
     }
 
     let ergebnis = sequenz.join("");
-    ergebnis = ergebnis.replaceAll("B", "&#13");
+    ergebnis = ergebnis.replaceAll("\n", "&#13");
     return ergebnis + "...";
   }
 
@@ -64,6 +64,7 @@ class Markow {
       dieseZeichen = dieseZeichen.replaceAll(" ", "_");
       naechstesZeichen = naechstesZeichen.join("|");
       naechstesZeichen = naechstesZeichen.replaceAll(" ", "_");
+      naechstesZeichen = naechstesZeichen.replaceAll("\n", "\\n");
       const zeile = dieseZeichen + " -> " + naechstesZeichen;
       zeilen.push(zeile);
     }

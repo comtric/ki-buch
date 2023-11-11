@@ -25,6 +25,7 @@ const GUI = {
     // Drop-down Textquelle
     createElement("label", "Quelle............");
     this.textWaehler = createSelect();
+    this.textWaehler.option("michael.txt");
     this.textWaehler.option("goethe.txt");
     this.textWaehler.option("kafka.txt");
     this.textWaehler.option("austen.txt");

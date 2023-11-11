@@ -37,10 +37,12 @@ function ladeText(pfad) {
     // textQuelle aufräumen
     textQuelle = textQuelle.toLowerCase();
     textQuelle = entfernePaarigeZeichen(textQuelle);
+    GUI.textAusgabe.html(textQuelle.replaceAll("\n", "&#13"));
     // Zeilenumbrüche durch "B" ersetzen
-    textQuelle = textQuelle.replaceAll("\n", "B");
+    //textQuelle = textQuelle.replaceAll("\n", "B");
     // Button "Text lernen" aktivieren
     GUI.lerneTextButton.removeAttribute("disabled");
+
   }
 }
 
