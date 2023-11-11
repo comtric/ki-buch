@@ -2,11 +2,11 @@
 // hier nur spärliche Kommentare.
 
 class Markow {
-  
+
   constructor() {
-    uebergaenge: {};
+    uebergaenge: { };
   }
-  
+
   // Schnittstelle: Text lernen
   lerneText(textQuelle) {
     this.uebergaenge = {};
@@ -18,23 +18,36 @@ class Markow {
       const naechstesWort = worte[i + 1];
       this.lerneUebergang(diesesWort, naechstesWort);
     }
+    //var text = this.uebergaenge.join("-");
+    let uebergaenge2 = Object.entries(this.uebergaenge);
+    var text = "";
+    uebergaenge2.forEach(eintrag => {
+      text += eintrag[0] + "->";
+
+      let eintrag1 = Object.entries(eintrag[1]);
+      eintrag1.forEach(eintrag2 => {
+        text += eintrag2[0] + "(" + eintrag2[1] + ")" + " | ";
+      });
+      text += "\n";
+    });
+    GUI.textAusgabe.html(text);
   }
-  
+
   lerneUebergang(letztesWort, naechstesWort) {
     const eintrag = this.uebergaenge[letztesWort];
     if (!eintrag) {
-      this.uebergaenge[letztesWort] = {[naechstesWort]: 1};
+      this.uebergaenge[letztesWort] = { [naechstesWort]: 1 };
     } else {
-      if (!eintrag[naechstesWort]){
+      if (!eintrag[naechstesWort]) {
         eintrag[naechstesWort] = 1;
       } else {
         eintrag[naechstesWort] += 1;
       }
     }
   }
-  
+
   //Schnittstelle: Wort vorschlagen
-  wortVorschlaege(letztesWort, anzahl=5) {
+  wortVorschlaege(letztesWort, anzahl = 5) {
     let eintrag = this.uebergaenge[letztesWort];
     if (eintrag) {
       const eintragAlsArray = Object.entries(eintrag);
@@ -44,5 +57,5 @@ class Markow {
       return folgewoerter;
     }
   }
-  
+
 }

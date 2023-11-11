@@ -1,6 +1,7 @@
 const GUI = {
 
   textEingabe: undefined,
+  textAusgabe: undefined,
   wortEinfuegeKnoepfe: [],
 
   erzeugeGUI() {
@@ -8,6 +9,7 @@ const GUI = {
 
     noCanvas();
 
+    this.textAusgabe = createElement("textarea");
     this.textEingabe = createElement("textarea");
     this.textEingabe.input(eingabe);
   }
