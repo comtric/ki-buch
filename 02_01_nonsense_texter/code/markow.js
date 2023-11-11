@@ -10,13 +10,24 @@ class Markow {
   // Schnittstelle: Alle Übergänge in einem Text lernen
   lerneText(textQuelle, grad) {
     this.uebergaenge = {};
-    const nUebergaenge = textQuelle.length - grad;
+    // const nUebergaenge = textQuelle.length - grad;
 
-    for (let i = 0; i < nUebergaenge; i++) {
-      const letzteZeichen = textQuelle.slice(i, i + grad);
-      const naechstesZeichen = textQuelle[i + grad];
-      this.lerneUebergang(letzteZeichen, naechstesZeichen);
-    }
+
+    // for (let i = 0; i < nUebergaenge; i++) {
+    //   const letzteZeichen = textQuelle.slice(i, i + grad);
+    //   const naechstesZeichen = textQuelle[i + grad];
+    //   this.lerneUebergang(letzteZeichen, naechstesZeichen);
+    // }
+    let letzteZeichen = "";
+    let aktuellesZeichen = "";
+    let array = textQuelle.split(" ");
+    array.forEach((element, i) => {
+      if (i > 0) {
+        aktuellesZeichen = element;
+        this.lerneUebergang(letzteZeichen, aktuellesZeichen);
+      }
+      letzteZeichen = element;
+    });
   }
 
   lerneUebergang(letzteZeichen, naechstesZeichen) {
@@ -36,23 +47,33 @@ class Markow {
   }
 
   // Schnittstelle: Text erzeugen
-  erzeugeText(anfang, nZeichen) {
-    let letzteZeichen = anfang;
-    const sequenz = [anfang];
+  erzeugeText(letzteZeichen, nWoerter) {
 
-    while (sequenz.length <= nZeichen) {
-      const naechsteZeichen = this.gewichteterUebergang(letzteZeichen);
-      // const naechsteZeichen = this.zufaelligerUebergang(letzteZeichen);
-      if (!naechsteZeichen) {
+    let result = letzteZeichen;
+    // let letzteZeichen = anfang;
+    // const sequenz = [anfang];
+
+    // while (sequenz.length <= nZeichen) {
+    //   const naechsteZeichen = this.gewichteterUebergang(letzteZeichen);
+    //   // const naechsteZeichen = this.zufaelligerUebergang(letzteZeichen);
+    //   if (!naechsteZeichen) {
+    //     break;
+    //   }
+    //   sequenz.push(naechsteZeichen);
+    //   letzteZeichen = (letzteZeichen + naechsteZeichen).slice(1);
+    // }
+
+    for (let i = 0; i < nWoerter; i++) {
+      letzteZeichen = this.gewichteterUebergang(letzteZeichen);
+      if (!letzteZeichen)
         break;
-      }
-      sequenz.push(naechsteZeichen);
-      letzteZeichen = (letzteZeichen + naechsteZeichen).slice(1);
+      result += " " + letzteZeichen ;
     }
 
-    let ergebnis = sequenz.join("");
-    ergebnis = ergebnis.replaceAll("\n", "&#13");
-    return ergebnis + "...";
+    result = result.replaceAll("\n", "&#13");
+    
+    return result;
+
   }
 
   zufaelligerUebergang(letzteZeichen) {

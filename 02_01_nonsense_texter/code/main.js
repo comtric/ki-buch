@@ -59,9 +59,10 @@ function lerneText() {
 // Callback-Funktion für GUI.erzeugeTextButton.mousePressed()
 function erzeugeText() {
   // Erste Zeichen der textQuelle auswählen
-  const anfang = textQuelle.slice(0, int(GUI.gradWaehler.value()));
+  //const anfang = textQuelle.slice(0, int(GUI.gradWaehler.value()));
+  const anfang = textQuelle.split(" ")[0];
   // Nonsense Text generieren
-  const generierterText = markow.erzeugeText(anfang, 500);
+  const generierterText = markow.erzeugeText(anfang, 50);
   // Generierten Text in die textAusgabe schreiben
   GUI.textAusgabe.html(generierterText);
 }
